@@ -329,4 +329,5 @@ export {
   archiveNote,
   unarchiveNote,
   deleteNote,
+  editNote,
 };

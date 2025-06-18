@@ -24,6 +24,7 @@ export const ThemeProvider = ({ children }) => {
   return (
     //smua state dan function dari context dilwatkan pada provder yg mana sbgai wrapper utk diterima
     //oleh consumer di masing2 component /children component yg diwraper
+    //yg masuk state = theme dan func toggleTheme! ingat bukan setThemenya !! :)))
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
       {children}
     </ThemeContext.Provider>

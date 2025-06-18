@@ -20,7 +20,9 @@ function App() {
     <ThemeProvider>
       <UserProvider>
         <NotesProvider>
-          <AppContent />
+          <Router>
+            <AppContent />
+          </Router>
         </NotesProvider>
       </UserProvider>
     </ThemeProvider>
@@ -29,7 +31,7 @@ function App() {
 export default App;
 
 function AppContent() {
-  const [theme, setTheme] = useTheme();
+  const { theme, toggleTheme } = useTheme(); //update ! dato contextTheme!
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
