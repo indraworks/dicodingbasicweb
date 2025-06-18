@@ -298,6 +298,24 @@ async function deleteNote(id) {
 }
 
 */
+
+//tambahan utk editNote
+async function editNote() {
+  const response = await fetchWithToken(`$BASE_URL/notes/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ title, body }),
+  });
+  const responseJson = await response.json();
+
+  if (responseJson.status !== "success") {
+    return { error: true, data: null };
+  }
+  return { error: false, data: responseJson.data };
+}
+
 export {
   getAccessToken,
   putAccessToken,

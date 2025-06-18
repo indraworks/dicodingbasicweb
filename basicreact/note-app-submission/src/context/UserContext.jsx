@@ -1,10 +1,13 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
+
+//ambil func2 dari netowork data
 import {
   login,
   register,
   getUserLogged,
   getAccessToken,
 } from "../utils/network_data";
+
 import { putAccessToken } from "../utils/network_data";
 
 const userContext = createContext();
@@ -17,21 +20,27 @@ export const UserProvider = ({ children }) => {
 
   const [user, setUser] = useState(null);
 
+  //state accessToken ambil dari Local Storage ada atau tidak?
+
   const [accessToken, setAccessToken] = useState(
     () => localStorage.getItem("accessToken") || null
   );
+
   const [initializing, setInitializing] = useState(true);
 
   //mngecel perubahan di localstorage apapkah token berubah atau tidak
   useEffect(() => {
+    //func fetchUser ada di kalang useEffect btkrja jika accessToken ada perubahan
     const fetchUser = async () => {
       //jika ada access token maka kita ambil data yg masuk di API data user diapi name,email
       if (accessToken) {
         const { error, data } = await getUserLogged(); //ambil data stlah login
-        //krn stlah login kita dapat data accessToken di LocaLStorage,accessToken berisi dan jalankan fetchUser() otomatis
+        //krn stlah login kita dapat data accessToken di LocaLStorage,accessToken berisi
+        // dan jalankan  func fetchUser() otomatis
         if (!error) setUser(data);
       }
     };
+    //invoke fetchUser jika accessTOken changed!
     fetchUser();
   }, [accessToken]);
 
@@ -57,11 +66,13 @@ export const UserProvider = ({ children }) => {
   //buat provider utk wraping state & function yg disebar ke anak2 componentnya/pemakai/consumer
   return (
     <userContext.Provider
+      //taruh smua value berisi state dan func yg akan di broadcast di anak2 component!
       value={{
         user,
         accessToken,
         initializing,
         //login adalah aliasnya tuk dipanggil idem yglain!
+        //sblah kiri adalah nama aliasnya !
         login: onLogin,
         register: onRegister,
         logout: onLogout,
@@ -71,7 +82,7 @@ export const UserProvider = ({ children }) => {
     </userContext.Provider>
   );
 };
-//buat pemanggil utk consumer-nya
+//buat pemanggil customHook utk consumer-nya
 export function useUser() {
   return useContext(userContext);
 }
@@ -83,6 +94,7 @@ dlm function provider buat state nya
 pada return function  buat tag /wraper yg merupakan variablecontext.namaProvider 
 dan masukan state atau function yg dibuat  diwrapernya 
 <namaCOntext.Provider value={{state,function }}
+
 stlahnya buat customHook utk consumernya  agar chld2 component bisa gunakan variableContext
 dgn cara return useCOntext(variableCOntext)
 
