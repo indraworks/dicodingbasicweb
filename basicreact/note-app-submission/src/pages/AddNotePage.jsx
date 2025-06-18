@@ -1,20 +1,25 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiCheck } from "react-icons/fi";
-import { addNote } from "../utils/data";
+import { useNotes } from "../context/NotesContext";
 
 const AddNotePage = () => {
   //state title,body
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const navigate = useNavigate();
+  const { createNotes } = useNotes();
 
   //const handleSubmit djalankan dari form lewat onSubmit
   //tapi ditriger dari button dimana typebutton adalah submit!
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    addNote({ title, body });
-    navigate("/");
+    // addNote({ title, body });
+    const result = await createNotes({ title, body });
+    if (!result.error) {
+      navigate("/");
+    }
   };
 
   return (

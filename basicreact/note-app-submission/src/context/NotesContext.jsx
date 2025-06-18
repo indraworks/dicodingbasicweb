@@ -9,7 +9,7 @@ import {
   unarchiveNote,
   getNote,
   editNote,
-} from "../utils/data";
+} from "../utils/network_data";
 
 //create context bernama noteContext
 export const NotesContext = createContext();
