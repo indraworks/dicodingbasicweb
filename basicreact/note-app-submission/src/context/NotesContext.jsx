@@ -12,7 +12,7 @@ import {
 } from "../utils/data";
 
 const NotesContext = createContext();
-const NotesProvider = () => {
+export const NotesProvider = () => {
   const [activeNotes, setActiveNotes] = useState([]);
   const [archiveNotes, setArchiveNotes] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -109,4 +109,3 @@ const NotesProvider = () => {
 export function useNotes() {
   return useContext(NotesContext);
 }
-export default NotesProvider;
