@@ -12,7 +12,7 @@ import {
 } from "../utils/data";
 
 //create context bernama noteContext
-const NotesContext = createContext();
+export const NotesContext = createContext();
 //buat Provider utk wraper
 
 export const NotesProvider = () => {

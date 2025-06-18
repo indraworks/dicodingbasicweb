@@ -1,41 +1,37 @@
 import React, { useEffect, useState } from "react";
+import { useNotes } from "../context/NotesContext";
 import { Link } from "react-router-dom";
 import { FiPlus } from "react-icons/fi";
 import NoteList from "../components/NoteList";
 import SearchBar from "../components/SearchBar";
-import {
-  archiveNote,
-  deleteNote,
-  getActiveNotes,
-  getArchiveNotes,
-} from "../utils/data";
 
 const HomePage = ({ searchTerm, setSearchTerm }) => {
-  const [activeNotes, setActiveNotes] = useState([]);
+  //ambil funtion2 yg akan dipakai consumer dari NotesContext
+  const { activeNotes, loading, deleteNote, archiveNote } = useNotes();
+  const [localNotes, setLocalNotes] = useState();
 
   //useEffect initla ambil data
   useEffect(() => {
-    refresNotes();
-  }, []);
-  const refresNotes = () => {
-    setActiveNotes(getActiveNotes());
-  };
+    //jika http sudah gak delay bisa masukan data
+    if (!loading) {
+      setLocalNotes(activeNotes);
+    }
+  }, [activeNotes, loading]);
 
   //hadnle delete dgn state yg sudah update
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (window.confirm("delete this note ??")) {
-      deleteNote(id);
-      refresNotes();
+      await deleteNote(id);
     }
   };
 
   //handlearchiving sama!
-  const handleArchive = (id) => {
-    archiveNote(id);
-    refresNotes();
+  const handleArchive = async (id) => {
+    await archiveNote(id);
   };
+
   //filteredNotes base searachTerm title
-  const filteredNotes = activeNotes.filter((note) =>
+  const filteredNotes = localNotes.filter((note) =>
     note.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -43,11 +39,15 @@ const HomePage = ({ searchTerm, setSearchTerm }) => {
     <>
       <h2>Active Notes</h2>
       <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-      <NoteList
-        notes={filteredNotes}
-        onDelete={handleDelete}
-        onArchive={handleArchive}
-      />
+      {loading ? (
+        <p>Loading Notes ....</p>
+      ) : (
+        <NoteList
+          notes={filteredNotes}
+          onDelete={handleDelete}
+          onArchive={handleArchive}
+        />
+      )}
 
       <div className="homepage__action">
         <Link to="/notes/new" className="action">
