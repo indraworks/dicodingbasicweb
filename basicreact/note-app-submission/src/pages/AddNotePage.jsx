@@ -8,6 +8,7 @@ const AddNotePage = () => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const navigate = useNavigate();
+
   const { createNotes } = useNotes();
 
   //const handleSubmit djalankan dari form lewat onSubmit

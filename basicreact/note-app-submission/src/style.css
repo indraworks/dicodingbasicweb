@@ -228,6 +228,10 @@ main {
 .toggle-locale {
   font-size: 28px;
 }
+/* tAMBAHAN INPUT GROUP */
+.input-group {
+  margin-bottom: 8px;
+}
 
 .input-login, .input-register {
   margin: 32px 0;
@@ -374,4 +378,14 @@ main {
    color: var(--background);
    
 
+}
+
+/* add error utk login & register */
+.error {
+  color:var(--error);
+   margin-bottom: 16px;
+   padding: 8px;
+   border-radius: 4px;
+   background-color: rgba(287,102,121,0.1);
+   /* var eroro with opacity  */
 }

@@ -14,6 +14,9 @@ import ArchivePage from "./pages/ArchivePage";
 import DetailPage from "./pages/DetailPage";
 import EditPage from "./pages/EditPage";
 import { getActiveNotes } from "./utils/data";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+//yg disini yg ditambahkan adalah protected route !
 
 function App() {
   return (
@@ -69,29 +72,37 @@ function AppContent() {
         </header>
         <main>
           <Routes>
-            <Route
-              path="/"
-              element={
-                <HomePage
-                  searchTerm={searchTerm}
-                  setSearchTerm={setSearchTerm}
-                />
-              }
-            />
-            <Route path="/notes/edit/:id" element={<EditPage />} />
-            <Route path="/notes/:id" element={<DetailPage />} />
-            Yesterday Membuat Aplikasi Catatan dengan React
-            <Route
-              path="/archive"
-              element={
-                <ArchivePage
-                  searchTerm={searchTerm}
-                  setSearchTerm={setSearchTerm}
-                />
-              }
-            />
-            <Route path="/notes/new" element={<AddNotePage />} />
-            <Route path="*" element={<NotFoundPage />} />
+            {/* tambahan route utk login dan register  */}
+            <Route path="/login" element={<LoginPage />}>
+              <Route path="/register" element={<RegisterPage />} />
+              {/*Protected Route ,RequiredAuth taruh dicomponent not page    */}
+              <Route element={<RequiredAuth />} />
+              {/* nested route */}
+              <Route
+                path="/"
+                element={
+                  <HomePage
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
+                  />
+                }
+              />
+              <Route path="/notes/edit/:id" element={<EditPage />} />
+              <Route path="/notes/:id" element={<DetailPage />} />
+
+              <Route
+                path="/archive"
+                element={
+                  <ArchivePage
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
+                  />
+                }
+              />
+              <Route path="/notes/new" element={<AddNotePage />} />
+              <Route path="*" element={<NotFoundPage />} />
+              {/* end nested route */}
+            </Route>
           </Routes>
         </main>
       </div>

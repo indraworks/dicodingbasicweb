@@ -7,6 +7,7 @@ import SearchBar from "../components/SearchBar";
 
 const HomePage = ({ searchTerm, setSearchTerm }) => {
   //ambil funtion2 yg akan dipakai consumer dari NotesContext
+  //hanya activeNotes saja yg state dari context
   const { activeNotes, loading, deleteNote, archiveNote } = useNotes();
   const [localNotes, setLocalNotes] = useState();
 
@@ -14,7 +15,7 @@ const HomePage = ({ searchTerm, setSearchTerm }) => {
   useEffect(() => {
     //jika http sudah gak delay bisa masukan data
     if (!loading) {
-      setLocalNotes(activeNotes);
+      setLocalNotes(activeNotes); //localNotes berisi activeNotes(state) yg berisi data dari getNotes func
     }
   }, [activeNotes, loading]);
 

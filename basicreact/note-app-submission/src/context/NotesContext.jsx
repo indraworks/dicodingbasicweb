@@ -30,7 +30,7 @@ export const NotesProvider = () => {
     setLoading(true);
     const active = await getActiveNotes();
     const archive = await getArchiveNotes();
-    if (!active.error) setActiveNotes(active.data || []);
+    if (!active.error) setActiveNotes(active.data || []); // state activeNote berisi data dari hasil getActiveNotes
     if (!archive.error) setArchiveNotes(archive.data || []);
     setLoading(false);
   };
@@ -109,7 +109,8 @@ export const NotesProvider = () => {
     </NotesContext.Provider>
   );
 };
-//consumer
+//consumer jika manggil salah satu state atau function diatas
+//harus pakai ini ! useNotes! :))
 export function useNotes() {
   return useContext(NotesContext);
 }

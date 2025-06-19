@@ -18,6 +18,64 @@ async function fetchWithToken(url, options = {}) {
   });
 }
 
+/*
+Penjelasan isi OPTIONS yg ada pada fetch apa saja setelah adress url,
+berisai object properties ,apa saja? 
+
+Here's how to use fetch() with options:
+JavaScript
+
+fetch(url, options)
+  .then(response => {
+    // Handle the response
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json(); // Or .text(), .blob(), etc.
+  })
+  .then(data => {
+    console.log(data);
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+  1)BERIKUT commons atau yg seringkali diapaki adalah : { method: CRUD} -> dimana 
+  bisa berisi : {method:'POST'},{method:'PUT'},{method:'GET'},{method:'DELETE'}
+Common options properties:
+method: The HTTP method for the request (e.g., 'GET', 'POST', 'PUT', 'DELETE').
+
+2) headers jadi tanda kurung kurawal stlah url bisa : {headers: {'Content-type':'application/json',
+                                                                  'Authorization':'Bearer '$OUR_TOKEN}}
+
+
+
+3) body : ini data form yg kita kirim-ambil ke/dan dari  end-point API :
+    The data to send in the request body, typically for POST, PUT, 
+    or PATCH requests. This can be a String, FormData, Blob, ArrayBuffer, etc.
+
+    
+
+    Example utk smua multiple options stlah fetch(url,{options}) berikut :
+
+    fetch('https://api.example.com/items', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  },
+  body: JSON.stringify({ item: 'new item' }),
+  mode: 'cors',
+  credentials: 'include'
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+
+ tapi kebiasaan kita pakai async dan await lebih clear ! 
+
+
+*/
+
 async function login({ email, password }) {
   const response = await fetch(`${BASE_URL}/login`, {
     method: "POST",

@@ -67,6 +67,9 @@ export const UserProvider = ({ children }) => {
   return (
     <userContext.Provider
       //taruh smua value berisi state dan func yg akan di broadcast di anak2 component!
+      //value idbawah ini yg state hanya 2 yaitu
+      //user dan accessToken ,yg lainya adalah function
+
       value={{
         user,
         accessToken,
