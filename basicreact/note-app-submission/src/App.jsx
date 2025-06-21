@@ -1,11 +1,25 @@
+import { Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import { FiMoon, FiSun, FiPlus, FiArchive, FiHome } from "react-icons/fi";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  Navigate,
+} from "react-router-dom";
+import {
+  FiMoon,
+  FiSun,
+  FiPlus,
+  FiArchive,
+  FiHome,
+  FiLogOut,
+} from "react-icons/fi";
 
 //import context (provider and consumer) :
 import { ThemeProvider, useTheme } from "./context/ThemeContext";
 import { NotesProvider } from "./context/NotesContext";
-import { UserProvider } from "./context/UserContext";
+import { UserProvider, useUser } from "./context/UserContext";
 
 import HomePage from "./pages/HomePage";
 import AddNotePage from "./pages/AddNotePage";
@@ -13,9 +27,8 @@ import NotFoundPage from "./pages/NotFoundPage";
 import ArchivePage from "./pages/ArchivePage";
 import DetailPage from "./pages/DetailPage";
 import EditPage from "./pages/EditPage";
-import { getActiveNotes } from "./utils/data";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
+import RequiredAuth from "./components/RequiredAuth";
+import AuthForm from "./components/AuthForm";
 //yg disini yg ditambahkan adalah protected route !
 
 function App() {
@@ -36,13 +49,12 @@ export default App;
 function AppContent() {
   const { theme, toggleTheme } = useTheme(); //update ! dato contextTheme!
   const [searchTerm, setSearchTerm] = useState("");
+  const { user, loading, logout } = useUser();
 
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-  }, [theme]);
+  console.log("Current auth state", { user, loading });
 
   return (
-    <Router>
+    <>
       {/* keterangan ada pada catatan !  */}
       <div className="app-container data-theme={theme}">
         <header>
@@ -62,6 +74,18 @@ function AppContent() {
                   Archive
                 </Link>
               </li>
+              {user /* show if user only login  */ && (
+                <li>
+                  <button
+                    onClick={logout}
+                    className="logout-button"
+                    title="Logout"
+                  >
+                    <FiLogOut />
+                    Logout
+                  </button>
+                </li>
+              )}
               <li>
                 <button onClick={toggleTheme} className="toggle-theme">
                   {theme === "dark" ? <FiSun /> : <FiMoon />}
@@ -72,12 +96,8 @@ function AppContent() {
         </header>
         <main>
           <Routes>
-            {/* tambahan route utk login dan register  */}
-            <Route path="/login" element={<LoginPage />}>
-              <Route path="/register" element={<RegisterPage />} />
-              {/*Protected Route ,RequiredAuth taruh dicomponent not page    */}
-              <Route element={<RequiredAuth />} />
-              {/* nested route */}
+            <Route path="/login" element={<AuthForm />} />
+            <Route element={<ProtectedRoutes />}>
               <Route
                 path="/"
                 element={
@@ -89,7 +109,6 @@ function AppContent() {
               />
               <Route path="/notes/edit/:id" element={<EditPage />} />
               <Route path="/notes/:id" element={<DetailPage />} />
-
               <Route
                 path="/archive"
                 element={
@@ -100,14 +119,30 @@ function AppContent() {
                 }
               />
               <Route path="/notes/new" element={<AddNotePage />} />
-              <Route path="*" element={<NotFoundPage />} />
-              {/* end nested route */}
             </Route>
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>
       </div>
-    </Router>
+    </>
   );
+}
+
+//Protected Route with Loading Componentes
+function ProtectedRoutes({ children }) {
+  const { user, loading } = useUser();
+
+  if (loading) {
+    return (
+      <div className="loading-overlay">
+        <div className="loading-spinner">
+          <p>Checking Authentication ....</p>
+        </div>
+      </div>
+    );
+  }
+
+  return user ? <Outlet /> : <Navigate to="/login" replace />;
 }
 
 /*CATATAN :

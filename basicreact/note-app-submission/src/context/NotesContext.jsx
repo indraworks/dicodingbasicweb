@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 //memamkai smua function CRUD pada notes yg ada di network-data,js
 import {
   getActiveNotes,
-  getArchiveNotes,
+  getArchivedNotes,
   addNote,
   deleteNote,
   archiveNote,
@@ -15,9 +15,9 @@ import {
 export const NotesContext = createContext();
 //buat Provider utk wraper
 
-export const NotesProvider = () => {
+export const NotesProvider = ({ children }) => {
   const [activeNotes, setActiveNotes] = useState([]);
-  const [archiveNotes, setArchiveNotes] = useState([]);
+  const [archivedNotes, setArchivedNotes] = useState([]);
   const [loading, setLoading] = useState(true);
 
   //fetch ambil archiveNotes & activeNotes
@@ -29,9 +29,9 @@ export const NotesProvider = () => {
     //activekan loading
     setLoading(true);
     const active = await getActiveNotes();
-    const archive = await getArchiveNotes();
+    const archived = await getArchivedNotes();
     if (!active.error) setActiveNotes(active.data || []); // state activeNote berisi data dari hasil getActiveNotes
-    if (!archive.error) setArchiveNotes(archive.data || []);
+    if (!archived.error) setArchivedNotes(archived.data || []);
     setLoading(false);
   };
   //hanya sekali saja tiap refresh utk ambil fetch
@@ -91,15 +91,15 @@ export const NotesProvider = () => {
   return (
     <NotesContext.Provider
       value={{
-        activeNotes,
-        archiveNotes,
+        activeNotes, //ini state array active
+        archivedNotes, //ini state array archive
         loading,
         createNote,
         //gunakan alias
         //sblah kiri alias
         deleteNote: removeNote,
-        archiveNote: archive,
-        unarchiveNote: unarchive,
+        archiveNote: archive, //ini function buat archive
+        unarchiveNote: unarchive, //ini function buat unarchive
         getNote: getNoteById,
         editNote: updateNote,
         refreshNote: fetchNotes,

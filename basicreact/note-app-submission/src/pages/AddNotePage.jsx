@@ -9,7 +9,7 @@ const AddNotePage = () => {
   const [body, setBody] = useState("");
   const navigate = useNavigate();
 
-  const { createNotes } = useNotes();
+  const { createNote } = useNotes();
 
   //const handleSubmit djalankan dari form lewat onSubmit
   //tapi ditriger dari button dimana typebutton adalah submit!
@@ -17,7 +17,7 @@ const AddNotePage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // addNote({ title, body });
-    const result = await createNotes({ title, body });
+    const result = await createNote({ title, body });
     if (!result.error) {
       navigate("/");
     }

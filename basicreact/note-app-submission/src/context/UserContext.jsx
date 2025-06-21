@@ -20,6 +20,9 @@ export const UserProvider = ({ children }) => {
 
   const [user, setUser] = useState(null);
 
+  //loading
+  const [loading, setLoading] = useState(true);
+
   //state accessToken ambil dari Local Storage ada atau tidak?
 
   const [accessToken, setAccessToken] = useState(
@@ -32,6 +35,9 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     //func fetchUser ada di kalang useEffect btkrja jika accessToken ada perubahan
     const fetchUser = async () => {
+      //active loading
+      setLoading(true);
+
       //jika ada access token maka kita ambil data yg masuk di API data user diapi name,email
       if (accessToken) {
         const { error, data } = await getUserLogged(); //ambil data stlah login
@@ -39,10 +45,13 @@ export const UserProvider = ({ children }) => {
         // dan jalankan  func fetchUser() otomatis
         if (!error) setUser(data);
       }
+      setLoading(false);
     };
     //invoke fetchUser jika accessTOken changed!
     fetchUser();
   }, [accessToken]);
+
+  //loading
 
   //pamakaian login func stlah post,jika !error maka dapat accessToken taruh diLocalStorage ,setState accessToken!
   const onLogin = async ({ email, password }) => {
@@ -58,7 +67,7 @@ export const UserProvider = ({ children }) => {
     return await register({ name, email, password });
   };
 
-  const onLogout = () => {
+  const logout = () => {
     putAccessToken(""); //bersuhkan storage accessTOken
     setAccessToken(null); //clearkan state accessTOken
     setUser(null); //bersihkan state user/data user!
@@ -72,13 +81,14 @@ export const UserProvider = ({ children }) => {
 
       value={{
         user,
+        loading,
         accessToken,
         initializing,
         //login adalah aliasnya tuk dipanggil idem yglain!
         //sblah kiri adalah nama aliasnya !
         login: onLogin,
         register: onRegister,
-        logout: onLogout,
+        logout, //logout
       }}
     >
       {children}

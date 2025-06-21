@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FiCheck, FiX } from "react-icons/fi";
-import { getNote, editNote } from "../utils/data";
+import { useNotes } from "../context/NotesContext";
 
 const EditPage = () => {
   const [note, setNote] = useState(null);
   const { id } = useParams();
+  const { editNote, getNote } = useNotes();
 
   const navigate = useNavigate();
 
@@ -15,13 +16,29 @@ const EditPage = () => {
 
   //ambil awal state nilai field2 dari note dari id yg dituju
   //utk ditampilkan !
+
+  //gunaka useEffect utk melihat perubahan id dari params!
   useEffect(() => {
-    const foundNote = getNote(id);
-    if (foundNote) {
-      setNote(foundNote);
-      setTitle(foundNote.title);
-      setBody(foundNote.body);
-    }
+    const fetchNote = async () => {
+      const result = await getNote(id);
+      if (!result.error) {
+        setNote(result);
+      }
+    };
+
+    fetchNote();
+  }, [id]);
+
+  useEffect(() => {
+    const foundNote = async () => {
+      const result = await getNote(id);
+      if (!result.error) {
+        setNote(foundNote);
+        setTitle(foundNote.title);
+        setBody(foundNote.body);
+      }
+    };
+    foundNote();
   }, [id]);
 
   //handle !
