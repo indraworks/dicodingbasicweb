@@ -2,7 +2,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { FiArrowLeft, FiTrash2, FiArchive, FiEdit } from "react-icons/fi";
 
 import { useNotes } from "../context/NotesContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const DetailPage = () => {
   //smua functuon yg berhunngan dgn notes(CRUD) dan state
@@ -10,24 +10,50 @@ const DetailPage = () => {
   const { getNote, deleteNote, archiveNote, unarchiveNote } = useNotes();
   //local state  hooks
   const [note, setNote] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   //useParams utk ambil id dari browser
   const { id } = useParams();
   //const note = getNote(id); // gak dipakai kita update automaticly dari useEffect !
-
+  const navigate = useNavigate();
   //gunaka useEffect utk melihat perubahan id dari params!
   useEffect(() => {
     const fetchNote = async () => {
-      const result = await getNote(id);
-      if (!result.error) {
-        setNote(result);
+      try {
+        setLoading(true);
+        const result = await getNote(id);
+        if (!result.error) {
+          //harus dot data krn bawaan dari json
+          setNote(result.data);
+        }
+      } catch (error) {
+        console.error("Error Fecthing note ", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchNote();
-  }, [id]);
+  }, [id, getNote]);
 
-  const navigate = useNavigate();
+  /*
+response create/add note :
+{
+  "status": "success",
+  "message": "Note created",
+  "data": { <---------------------------------------------------sellalu data! 
+      "id": "notes-_O6A6TJcCYUWO7t4",
+      "title": "Hello, Notes!",
+      "body": "My new notes.",
+      "owner": "user-l-wposXQYGosf0ZA",
+      "archived": false,
+      "createdAt": "2022-07-28T10:12:12.396Z"
+  }
+}
+
+
+
+*/
 
   // Proper console logging
   //console.log("Current note:", JSON.stringify(note, null, 2));
@@ -65,6 +91,7 @@ const DetailPage = () => {
     navigate(`/notes/edit/${id}`);
   };
 
+  console.log("Current note:", JSON.stringify(note, null, 2));
   return (
     <div className="detail-page">
       <Link to={note.archived ? "/archive" : "/"} className="action">

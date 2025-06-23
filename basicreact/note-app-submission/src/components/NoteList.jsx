@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { deleteNote, archiveNote, getActiveNotes } from "../utils/network_data";
+
 import EmptyNotes from "./EmptyNotes";
 import NoteItem from "./NoteItem";
 
@@ -16,6 +16,7 @@ const NoteList = ({ notes, onDelete, onArchive }) => {
     <div className="note-list">
       {notes.map((note) => (
         <NoteItem
+          className="note-item"
           key={note.id}
           // id={note.id}
           // title={note.title}

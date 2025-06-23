@@ -1,14 +1,20 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
+import { useInput } from "../utils/UseInput";
 
 const AuthForm = () => {
   const [isRegister, setIsRegister] = useState(false);
-  const { login, register } = useUser("");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { login, register } = useUser();
+  // const [name, setName] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+  const { name, handleNameChange } = useInput("");
+  const [email, handleEmailChange] = useInput("");
+  const [password, handlePasswordChange] = useInput("");
+
   const navigate = useNavigate();
 
   //handleSubmi
@@ -51,7 +57,7 @@ const AuthForm = () => {
               name="name"
               id="name"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={handleNameChange}
               required
               placeholder="Enter your Name"
             />
@@ -64,7 +70,7 @@ const AuthForm = () => {
             name="email"
             id="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={handleEmailChange}
             required
             placeholder="Enter your email "
           />
@@ -76,7 +82,7 @@ const AuthForm = () => {
             name="password"
             id="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={handlePasswordChange}
             required
             placeholder="Enter your password "
             minLength={isRegister ? 6 : undefined}

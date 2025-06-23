@@ -43,7 +43,10 @@ export const UserProvider = ({ children }) => {
         const { error, data } = await getUserLogged(); //ambil data stlah login
         //krn stlah login kita dapat data accessToken di LocaLStorage,accessToken berisi
         // dan jalankan  func fetchUser() otomatis
-        if (!error) setUser(data);
+        if (!error) {
+          setUser(data);
+          console.log("user", user);
+        }
       }
       setLoading(false);
     };
@@ -51,7 +54,7 @@ export const UserProvider = ({ children }) => {
     fetchUser();
   }, [accessToken]);
 
-  //loading
+  //getUser Data
 
   //pamakaian login func stlah post,jika !error maka dapat accessToken taruh diLocalStorage ,setState accessToken!
   const onLogin = async ({ email, password }) => {

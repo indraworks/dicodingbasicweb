@@ -14,6 +14,7 @@ import {
   FiArchive,
   FiHome,
   FiLogOut,
+  FiLogIn,
 } from "react-icons/fi";
 
 //import context (provider and consumer) :
@@ -60,38 +61,39 @@ function AppContent() {
         <header>
           <h2>CatatanKu</h2>
           <nav className="navigation">
-            <ul>
-              <li>
-                <Link to={"/"}>
-                  <FiHome />
-                  Home
-                </Link>
-              </li>
+            <div className="nav-group nav-left">
+              <Link to={"/"} className="nav-link">
+                <FiHome />
+                Home
+              </Link>
 
-              <li>
-                <Link to="/archive">
-                  <FiArchive />
-                  Archive
-                </Link>
-              </li>
-              {user /* show if user only login  */ && (
-                <li>
+              <Link to="/archive " className="nav-link">
+                <FiArchive />
+                Archive
+              </Link>
+            </div>
+            {/* righ -align user section  */}
+            <div className="nav-group nav-right">
+              {user && (
+                <>
+                  <span className="user-greeting">
+                    Hello, <strong>{user.name}</strong>
+                  </span>
+
                   <button
                     onClick={logout}
-                    className="logout-button"
+                    className="nav-button"
                     title="Logout"
                   >
                     <FiLogOut />
-                    Logout
                   </button>
-                </li>
+                </>
               )}
-              <li>
-                <button onClick={toggleTheme} className="toggle-theme">
-                  {theme === "dark" ? <FiSun /> : <FiMoon />}
-                </button>
-              </li>
-            </ul>
+            </div>
+
+            <button onClick={toggleTheme} className="nav-button toggle-theme">
+              {theme === "dark" ? <FiSun /> : <FiMoon />}
+            </button>
           </nav>
         </header>
         <main>
