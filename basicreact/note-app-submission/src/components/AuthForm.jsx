@@ -6,14 +6,12 @@ import { useInput } from "../utils/UseInput";
 const AuthForm = () => {
   const [isRegister, setIsRegister] = useState(false);
   const { login, register } = useUser();
-  // const [name, setName] = useState("");
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
+
   const [error, setError] = useState("");
 
-  const { name, handleNameChange } = useInput("");
-  const [email, handleEmailChange] = useInput("");
-  const [password, handlePasswordChange] = useInput("");
+  const nameInput = useInput("");
+  const emailInput = useInput("");
+  const passwordInput = useInput("");
 
   const navigate = useNavigate();
 
@@ -21,22 +19,31 @@ const AuthForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(""); //clear previous error
-    if (isRegister) {
-      //handle registration
-      const { error } = await register({ name, email, password });
-      if (error) {
-        setError("Registration Failed.please try again..");
+    try {
+      const authData = isRegister
+        ? {
+            name: nameInput.value,
+            email: emailInput.value,
+            password: passwordInput.value,
+          }
+        : {
+            email: emailInput.value,
+            password: passwordInput.value,
+          };
+      const { error: authError } = await (isRegister ? register : login)(
+        authData
+      );
+      if (authError) {
+        setError(
+          isRegister
+            ? "Registration Failed. Please try again!"
+            : "Login Failed.Please check your credential!"
+        );
       } else {
         navigate("/");
       }
-    } else {
-      //handle login
-      const { error } = await login({ email, password });
-      if (error) {
-        setError("Login failed .Please check your credential");
-      } else {
-        navigate("/");
-      }
+    } catch (err) {
+      setError("un Expected error occured!");
     }
   };
 
@@ -54,10 +61,10 @@ const AuthForm = () => {
             <label htmlFor="name">Name</label>
             <input
               type="text"
-              name="name"
               id="name"
-              value={name}
-              onChange={handleNameChange}
+              name="name"
+              value={nameInput.value}
+              onChange={nameInput.onChange}
               required
               placeholder="Enter your Name"
             />
@@ -67,10 +74,10 @@ const AuthForm = () => {
           <label htmlFor="email">Email</label>
           <input
             type="email"
-            name="email"
             id="email"
-            value={email}
-            onChange={handleEmailChange}
+            name="email"
+            value={emailInput.value}
+            onChange={emailInput.onChange}
             required
             placeholder="Enter your email "
           />
@@ -79,10 +86,10 @@ const AuthForm = () => {
           <label htmlFor="password">Password</label>
           <input
             type="password"
-            name="password"
             id="password"
-            value={password}
-            onChange={handlePasswordChange}
+            name="password"
+            value={passwordInput.value}
+            onChange={passwordInput.onChange}
             required
             placeholder="Enter your password "
             minLength={isRegister ? 6 : undefined}
@@ -120,3 +127,31 @@ const AuthForm = () => {
 };
 
 export default AuthForm;
+
+/*
+old script!
+if (isRegister) {
+      //handle registration
+      const { error } = await register({ name, email, password });
+      if (error) {
+        setError("Registration Failed.please try again..");
+      } else {
+        navigate("/");
+      }
+    } else {
+      //handle login
+      const { error } = await login({ email, password });
+      if (error) {
+        setError("Login failed .Please check your credential");
+      } else {
+        navigate("/");
+      }
+    }
+  };
+
+
+
+
+
+
+*/
