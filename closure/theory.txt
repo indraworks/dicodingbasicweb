@@ -1,0 +1,20 @@
+Apa itu Closure?
+Closure adalah fungsi yang:
+
+Mengingat lingkup leksikalnya (variabel dari tempat ia dibuat).
+
+Bisa dijalankan di luar lingkup aslinya, tetapi tetap mengakses variabel tersebut.
+
+3 Unsur Utama Closure:
+Fungsi Luar (Outer Function): Menyimpan variabel yang akan "ditutup" (closed over).
+
+Fungsi Dalam (Inner Function): Mengakses variabel dari fungsi luar.
+
+State yang Bertahan: Variabel tetap hidup meskipun fungsi luar sudah selesai dieksekusi.
+
+Mengapa Closure Penting?
+Enkapsulasi data (seperti variabel privat di OOP).
+
+Fungsi yang menyimpan state (contoh: counter, memoization).
+
+Event handler, callback, dan pola pemrograman fungsional.
